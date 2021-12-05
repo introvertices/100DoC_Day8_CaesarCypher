@@ -9,17 +9,20 @@ def main():
   valid_menu_choice = False
   while not valid_menu_choice:
     try:
-      if direction == "encode":
+      if direction == "encode" or direction == "decode":
         valid_menu_choice = True
         text = input("\nType or paste your message:\n").lower()
-        shift = int(input("\nType the shift number:\n"))
-        encrypt(text,shift)
-      elif direction == "decode":
-        valid_menu_choice = True
-        text = input("\nType or paste your message:\n").lower()
-        shift = int(input("\nType the shift number:\n"))
-        decrypt(text,shift)
 
+        #Get the shift amount and fix it if it's over the typical alphabetical range
+        shift = int(input("\nType a shift number:\n"))
+        if shift > 26 or shift < 0:
+          shift = shift_fix(shift)
+
+        # Encode or decode depending on what was chosen  
+        if direction == "encode":
+          encrypt(text,shift)
+        else:
+          decrypt(text,shift)
         
       else:
         print("Invalid choice")
@@ -42,6 +45,9 @@ def banner():
                                              | |                    
                                              |_|                    
   '''
+
+def shift_fix(shift):
+  return shift % 26
 
 
 def encrypt(text,shift):
